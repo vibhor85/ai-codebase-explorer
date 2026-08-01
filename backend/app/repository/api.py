@@ -1,7 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
-from .scanner import scan_repository
+from .exception import InvalidRepositoryPathException
 from .models import LoadRepositoryRequest
+from .scanner import scan_repository
 
 
 router = APIRouter()
@@ -9,4 +10,8 @@ router = APIRouter()
 
 @router.post("/repository/post")
 def post_repository(request: LoadRepositoryRequest):
-    return scan_repository(request.path)
+    try:
+        return scan_repository(request.path)
+    except InvalidRepositoryPathException as exc:
+        # TODO: Handle through global exception handler.
+        pass
