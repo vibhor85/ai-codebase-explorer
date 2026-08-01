@@ -10,8 +10,4 @@ router = APIRouter()
 
 @router.post("/repository/post")
 def post_repository(request: LoadRepositoryRequest):
-    try:
-        return scan_repository(request.path)
-    except InvalidRepositoryPathException as exc:
-        # TODO: Handle through global exception handler.
-        pass
+    return scan_repository(request.path)
