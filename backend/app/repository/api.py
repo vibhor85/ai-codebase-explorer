@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from fastapi import APIRouter, HTTPException
 
 from .exception import InvalidRepositoryPathException
@@ -8,6 +10,7 @@ from .scanner import scan_repository
 router = APIRouter()
 
 
-@router.post("/repository/post")
+@router.post("/repository/load")
 def post_repository(request: LoadRepositoryRequest):
-    return scan_repository(request.path)
+    path = Path(request.path)
+    return scan_repository(path)
