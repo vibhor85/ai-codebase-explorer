@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import { tokenAPICall } from './services/AuthService';
 
