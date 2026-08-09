@@ -6,10 +6,7 @@ export class ImportExtractor {
   constructor(
     private repositoryRoot: string,
     private importResolver: ImportResolver,
-  ) {
-    this.repositoryRoot = repositoryRoot;
-    this.importResolver = importResolver;
-  }
+  ) {}
 
   extract(source: ts.SourceFile) {
     const relationships: { source: string; target: string }[] = [];

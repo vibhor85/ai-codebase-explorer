@@ -1,16 +1,44 @@
-import * as path from 'path';
-import { parseFile } from './parser/TypeScriptParser.js';
-import { ImportExtractor } from './extractors/ImportExtractor.js';
-import { ImportResolver } from './resolver/ImportResolver.js';
+import { CodeAnalysisEngine } from './engine/CodeAnalysisEngine.js';
+import type { AnalysisRequest } from './engine/CodeAnalysisEngine.js';
 
-const repoDir =
-  '/Users/vibhorkumar/AI/AI-Codebase-Explorer/code-analysis-engine/samples';
+let input = '';
 
-const filePath = path.join(process.cwd(), 'samples', 'Login.tsx');
+process.stdin.on('data', (chunk) => {
+  input += chunk;
+});
 
-const sourceFile = parseFile(filePath);
+process.stdin.on('end', () => {
+  let request: AnalysisRequest;
 
-const importResolver = new ImportResolver(repoDir);
-const importExtractor = new ImportExtractor(repoDir, importResolver);
-const relationships = importExtractor.extract(sourceFile);
-console.log('relationships:', relationships);
+  try {
+    request = JSON.parse(input) as AnalysisRequest;
+  } catch (error) {
+    console.error(
+      'Failed to parse JSON input:',
+      error instanceof Error ? error.message : error,
+    );
+    process.exit(1);
+    return;
+  }
+
+  const engine = new CodeAnalysisEngine();
+
+  let relationships;
+
+  try {
+    relationships = engine.analyze(request);
+  } catch (error) {
+    console.error(
+      'Analysis failed:',
+      error instanceof Error ? error.message : error,
+    );
+    process.exit(1);
+    return;
+  }
+
+  const output = {
+    relationships,
+  };
+
+  process.stdout.write(JSON.stringify(output));
+});

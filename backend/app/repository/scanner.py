@@ -16,7 +16,7 @@ def scan_repository(repository_path: Path) -> RepositoryNode:
 
     for child in repository_path.iterdir():
         if child.is_dir():
-            child_node = scan_repository(path=child)
+            child_node = scan_repository(repository_path=child)
         else:
             child_node = RepositoryNode(
                 name=child.name, path=child, type=NodeType.FILE)
