@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useState } from 'react';
 import { tokenAPICall } from './services/AuthService';
+import { getUser } from './services/UserService';
 
 type LoginProps = {
   onLogin?: (username: string) => void;
@@ -13,6 +14,7 @@ export default function Login({ onLogin }: LoginProps) {
     e.preventDefault();
     onLogin?.(username);
     tokenAPICall();
+    getUser();
   }
 
   return (

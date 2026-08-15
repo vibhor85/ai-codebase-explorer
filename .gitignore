@@ -4,3 +4,4 @@ backend/.venv/
 backend/__pycache__/
 code-analysis-engine/node_modules/
 code-analysis-engine/dist/
+ai-poc/.env
