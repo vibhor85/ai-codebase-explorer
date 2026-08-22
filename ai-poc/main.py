@@ -1,92 +1,95 @@
-from backend.app.analysis.engine_client import analyze
-from backend.app.analysis.source_files import collect_source_files
-from backend.app.repository.scanner import scan_repository
-from langchain.chat_models import init_chat_model
-from dotenv import load_dotenv
 from pathlib import Path
 
+from dotenv import load_dotenv
+from langchain.agents import create_agent
+from langchain.chat_models import init_chat_model
+from langchain.tools import tool
+from langfuse.langchain import CallbackHandler
+
+from tools.get_file import get_file
+
+
 load_dotenv()
+langfuse_handler = CallbackHandler()
+
+REPOSITORY_ROOT = Path(
+    "/Users/vibhorkumar/AI/AI-Codebase-Explorer/code-analysis-engine/samples"
+).resolve()
 
 
-repository_path = Path(
-    "/Users/vibhorkumar/AI/AI-Codebase-Explorer/code-analysis-engine/samples")
+@tool
+def get_repository_file(file_path: str) -> dict:
+    """
+    Read a source file from the repository using a path relative to the
+    repository root.
 
-repository_node = scan_repository(repository_path)
+    Example:
+        Login.tsx
+        services/AuthService.ts
+    """
+    print(f"\n[TOOL CALL] get_repository_file({file_path})")
 
-source_files = collect_source_files(repository_node)
+    result = get_file(
+        str(REPOSITORY_ROOT),
+        file_path,
+    )
 
-relationships = analyze(repository_path, source_files)
+    print(f"[TOOL RESULT] Path: {result['path']}, Status: {result['status']}")
+    return result
 
-print("relationships: ", relationships)
-
-login_source = Path(
-    "/Users/vibhorkumar/AI/AI-Codebase-Explorer/code-analysis-engine/samples/Login.tsx"
-).read_text()
-
-auth_service_source = Path(
-    "/Users/vibhorkumar/AI/AI-Codebase-Explorer/code-analysis-engine/samples/services/AuthService.ts"
-).read_text()
-
-user_service_source = Path(
-    "/Users/vibhorkumar/AI/AI-Codebase-Explorer/code-analysis-engine/samples/services/UserService.ts"
-).read_text()
 
 model = init_chat_model(
     "gemini-3.6-flash",
     model_provider="google_genai",
 )
 
-prompt = f"""
-Analyze Login.tsx using ONLY the provided source code and dependency relationships.
 
-For each dependency:
+agent = create_agent(
+    model=model,
+    tools=[get_repository_file],
+)
 
-1. Explain how Login.tsx actually uses it.
-2. Identify the specific function, hook, type, or component being used.
-3. Explain its role based only on evidence in the provided code.
-4. Clearly distinguish:
-   - EVIDENCE: directly supported by the provided code.
-   - INFERENCE: a reasonable conclusion derived from the provided code.
-   - UNKNOWN: cannot be determined from the provided information.
-5. Do not assume the internal implementation of an imported module unless its source code is provided.
-6. Do not add typical or hypothetical behavior.
-7. If something cannot be determined, explicitly say:
-   "Cannot determine from the provided information."
 
-For each important claim, provide the relevant evidence from the source.
+prompt = """
+Explain the dependencies of Login.tsx.
 
-Source code: Login.tsx
-{login_source}
+You have access to the repository through the get_repository_file tool.
 
-Source code: AuthService.ts
-{auth_service_source}
+IMPORTANT RULES:
 
-Source code: UserService.ts
-{user_service_source}
+- Use the repository tool to inspect the files you need.
+- Treat every successful tool result as direct evidence that the requested file
+  exists and that its returned content is the actual file content.
+- Never claim that a file does not exist if the tool successfully returned its
+  contents.
+- Do not contradict information returned by the tool.
+- Before making a claim about a file, verify that the file was actually
+  retrieved.
+- Do not assume the implementation of a dependency without inspecting its
+  source code.
+- Do not rely on typical or hypothetical behavior when repository evidence
+  is available.
+- If required information was not retrieved, say:
+  "Cannot determine from the retrieved repository files."
 
-Dependency relationships:
-{relationships}
+For each important claim, clearly distinguish:
+
+- EVIDENCE: directly supported by retrieved source code.
+- INFERENCE: a reasonable conclusion based on retrieved source code.
+- UNKNOWN: cannot be determined from the retrieved repository files.
 """
 
-response = model.invoke(prompt)
 
-print(response.content)
+response = agent.invoke(
+    {
+        "messages": [
+            {"role": "user", "content": prompt}
+        ]
+    },
+    config={
+        "callbacks": [langfuse_handler]
+    }
+)
 
-# agent = create_agent(
-#     model=model,
-#     tools=[],  # explicit, even if empty — see note below
-# )
 
-# response = agent.invoke({
-#     "messages": [
-#         {"role": "user", "content": """
-# Here is some source code...
-
-# Here are the dependency relationships...
-
-# Explain the architecture.
-# """}
-#     ]
-# })
-
-# print(response["messages"][-1].content)
+print(response["messages"][-1].content)
