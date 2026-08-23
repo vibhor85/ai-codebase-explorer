@@ -28,6 +28,4 @@ def get_multiple_files(file_paths):
         result = get_file(REPOSITORY_ROOT, file_path)
         results.append(result)
 
-    print("[TOOL RESULT]", results)
-
     return json.dumps(results)
