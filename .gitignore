@@ -7,4 +7,5 @@ code-analysis-engine/dist/
 .env
 .env.*
 !.env.example
+*.egg-info/
 __pycache__

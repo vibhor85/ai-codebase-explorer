@@ -5,6 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "ai-poc",
     "fastapi>=0.141.1",
     "uvicorn[standard]>=0.52.0",
 ]
+
+[tool.uv.sources]
+ai-poc = { workspace = true }

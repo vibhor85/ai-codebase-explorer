@@ -1,8 +1,8 @@
 import json
 
 from langchain.tools import tool
-from tools.get_repository_file import get_file
-from config.config import REPOSITORY_ROOT
+from ai_poc.tools.get_repository_file import get_file
+from ai_poc.config.config import REPOSITORY_ROOT
 
 
 @tool

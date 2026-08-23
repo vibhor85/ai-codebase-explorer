@@ -1,6 +1,6 @@
 from langchain.tools import tool
 from pathlib import Path
-from config.config import REPOSITORY_ROOT
+from ai_poc.config.config import REPOSITORY_ROOT
 
 
 @tool

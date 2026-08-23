@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 
 
 class LoadRepositoryRequest(BaseModel):
+    question: str
     path: str
 
 

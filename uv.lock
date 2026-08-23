@@ -11,7 +11,7 @@ members = [
 [[package]]
 name = "ai-poc"
 version = "0.1.0"
-source = { virtual = "ai_poc" }
+source = { editable = "ai_poc" }
 dependencies = [
     { name = "langchain" },
     { name = "langchain-google-genai" },
@@ -64,12 +64,14 @@ name = "backend"
 version = "0.1.0"
 source = { virtual = "backend" }
 dependencies = [
+    { name = "ai-poc" },
     { name = "fastapi" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "ai-poc", editable = "ai_poc" },
     { name = "fastapi", specifier = ">=0.141.1" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.52.0" },
 ]

@@ -2,8 +2,8 @@ from dotenv import load_dotenv
 from langchain.agents import create_agent
 from langfuse.langchain import CallbackHandler
 from langchain_groq import ChatGroq
-from tools.get_repository_files import get_multiple_files
-from prompts.dependency_analysis import build_dependency_analysis_prompt
+from ai_poc.tools.get_repository_files import get_multiple_files
+from ai_poc.prompts.dependency_analysis import build_dependency_analysis_prompt
 
 
 load_dotenv()
