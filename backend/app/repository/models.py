@@ -1,17 +1,11 @@
 from pathlib import Path
-from enum import Enum
-
+from common.models import NodeType
 from pydantic import BaseModel, Field
 
 
 class LoadRepositoryRequest(BaseModel):
     question: str
     path: str
-
-
-class NodeType(str, Enum):
-    FILE = "file"
-    DIRECTORY = "directory"
 
 
 class RepositoryNode(BaseModel):

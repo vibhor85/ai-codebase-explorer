@@ -8,10 +8,12 @@ dependencies = [
     "ai-poc",
     "fastapi>=0.141.1",
     "uvicorn[standard]>=0.52.0",
+    "common",
 ]
 
 [tool.uv.sources]
 ai-poc = { workspace = true }
+common = { workspace = true }
 
 [tool.setuptools.packages.find]
 include = ["app*"]

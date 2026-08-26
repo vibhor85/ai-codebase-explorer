@@ -4,13 +4,13 @@ from langfuse.langchain import CallbackHandler
 from langchain_groq import ChatGroq
 from ai_poc.tools.get_repository_files import get_multiple_files
 from ai_poc.prompts.dependency_analysis import build_dependency_analysis_prompt
-
+from common.models import RepositoryKnowledge
 
 load_dotenv()
 langfuse_handler = CallbackHandler()
 
 
-def answer(question: str, relationships: list[dict[str, str]]):
+def answer(question: str, relationships: RepositoryKnowledge):
 
     # model = init_chat_model(
     #     "gemini-3.6-flash",

@@ -10,7 +10,11 @@ dependencies = [
     "langchain-groq>=1.1.3",
     "langfuse>=4.14.4",
     "python-dotenv>=1.2.2",
+    "common",
 ]
 
 [tool.setuptools.packages.find]
 include = ["ai_poc*"]
+
+[tool.uv.sources]
+common = { workspace = true }
