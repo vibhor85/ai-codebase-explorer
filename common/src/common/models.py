@@ -29,3 +29,7 @@ class RepositoryKnowledge(BaseModel):
     repository: RepositoryMetadata
     files: list[FileMetadata]
     relationships: list[DependencyRelationship]
+
+
+class ContextSelection(BaseModel):
+    files: list[str]

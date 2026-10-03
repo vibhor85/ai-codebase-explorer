@@ -1,9 +1,10 @@
 import json
+from common.models import RepositoryKnowledge
 
 
 def build_dependency_analysis_prompt(
     question: str,
-    relationships: list[dict[str, str]],
+    relationships: RepositoryKnowledge,
 ) -> str:
 
     relationships_json = json.dumps(

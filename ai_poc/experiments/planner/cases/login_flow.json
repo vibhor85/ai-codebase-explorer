@@ -1,0 +1,74 @@
+[
+  {
+    "question": "How does login work?",
+    "repository": {
+      "repository": {
+        "name": "sample-app",
+        "path": "/sample-app"
+      },
+      "files": [
+        {
+          "name": "Login.tsx",
+          "path": "Login.tsx",
+          "type": "file"
+        },
+        {
+          "name": "AuthService.ts",
+          "path": "services/AuthService.ts",
+          "type": "file"
+        },
+        {
+          "name": "UserService.ts",
+          "path": "services/UserService.ts",
+          "type": "file"
+        },
+        {
+          "name": "TokenService.ts",
+          "path": "services/TokenService.ts",
+          "type": "file"
+        }
+      ],
+      "relationships": [
+        {
+          "source": "Login.tsx",
+          "target": "services/AuthService.ts"
+        },
+        {
+          "source": "Login.tsx",
+          "target": "services/UserService.ts"
+        },
+        {
+          "source": "services/AuthService.ts",
+          "target": "services/TokenService.ts"
+        }
+      ]
+    }
+  },
+  {
+    "question": "How does password reset work?",
+    "repository": {
+      "repository": {
+        "name": "sample-app",
+        "path": "/sample-app"
+      },
+      "files": [
+        {
+          "name": "Login.tsx",
+          "path": "Login.tsx",
+          "type": "file"
+        },
+        {
+          "name": "AuthService.ts",
+          "path": "services/AuthService.ts",
+          "type": "file"
+        }
+      ],
+      "relationships": [
+        {
+          "source": "Login.tsx",
+          "target": "services/AuthService.ts"
+        }
+      ]
+    }
+  }
+]
